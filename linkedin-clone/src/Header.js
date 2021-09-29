@@ -7,8 +7,19 @@ import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import HeaderOption from "./HeaderOption";
+import { auth } from "./firebase";
+import { logout, selectUser } from "./features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Header() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
+  const logoutOfApp = () => {
+    dispatch(logout());
+    auth.signOut();
+  };
+
   return (
     <div className="header">
       <div className="header__left">
@@ -19,7 +30,7 @@ function Header() {
 
         <div className="header__search">
           <SearchIcon />
-          <input type="text" />
+          <input placeholder="Search" type="text" />
         </div>
       </div>
       <div className="header__right">
@@ -29,8 +40,9 @@ function Header() {
         <HeaderOption Icon={ChatIcon} title="Messaging" />
         <HeaderOption Icon={NotificationsIcon} title="Notifications" />
         <HeaderOption
-          avatar="https://images.indianexpress.com/2020/06/Dwayne-Johnson-759.jpg"
-          title="Srini"
+          avatar={true}
+          title={user?.displayName}
+          onClick={logoutOfApp}
         />
       </div>
     </div>
